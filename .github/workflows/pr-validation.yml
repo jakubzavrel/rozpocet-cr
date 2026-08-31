@@ -1,0 +1,26 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check PR title
+      run: |
+        if [ -z "${{ github.event.pull_request.title }}" ]; then
+          echo "PR title is empty!"
+          exit 1
+        fi
+        echo "PR title: ${{ github.event.pull_request.title }}"
+    
+    - name: Check PR description
+      run: |
+        if [ -z "${{ github.event.pull_request.body }}" ]; then
+          echo "Warning: PR description is empty"
+        fi
