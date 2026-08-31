@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07110f" />
+  <title>Ministr financí ČR · Kariéra 2025–2030</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="simulation.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand"><div class="mark">MF</div><div><strong>MINISTR FINANCÍ</strong><span>Česká republika · víceletá rozpočtová hra</span></div></div>
+      <div class="header-actions"><span class="live"><i></i><span id="saveStatus">AUTOMATICKY ULOŽENO</span></span><button class="ghost" id="exportGame">Export</button><button class="ghost" id="importGame">Import</button><button class="ghost help-btn" id="helpButton">Nápověda</button><input type="file" id="importFile" accept="application/json" hidden><button class="ghost" id="newGame">Nová hra</button></div>
+    </header>
+    <main>
+      <nav class="campaign-nav"><div><span id="yearLabel">ROZPOČTOVÝ ROK 2025</span><small id="yearMode"></small></div><div class="timeline" id="timeline"></div></nav>
+      <section class="hero">
+        <div><div class="eyebrow">KARIÉRA MINISTRA FINANCÍ / 2025–2030</div><h1>Rozhodujte dnes.<br><em>Neste důsledky v dalších letech.</em></h1></div>
+        <div class="score"><span>FISKÁLNÍ POZICE</span><strong id="position">Napjatá</strong><div class="scorebar"><i id="scorebar"></i></div><small id="scoreText"></small></div>
+      </section>
+      <section class="metrics" id="metrics"></section>
+      <section class="ideas" id="ideas"></section>
+      <section class="game-actions" id="gameActions"></section>
+      <section class="workspace">
+        <aside class="tree-panel panel">
+          <div class="panel-head"><div><span>ROZPOČTOVÁ STRUKTURA</span><h2>Kapitoly a příjmy</h2></div><button class="icon-btn" id="collapseAll">−</button></div>
+          <div class="tabs"><button class="active" data-tab="expenses">Výdaje</button><button data-tab="revenues">Příjmy</button></div>
+          <div class="tree" id="tree"></div>
+        </aside>
+        <section class="center-col">
+          <div class="panel chart-panel">
+            <div class="panel-head chart-head"><div><span>ROZPOČTOVÁ BILANCE</span><h2 id="budgetChartTitle">Výdajové kapitoly</h2></div><div class="chart-switch" role="radiogroup" aria-label="Zobrazení rozpočtové bilance"><label><input type="radio" name="budget-chart" value="pie"> Koláč · podíly</label><label><input type="radio" name="budget-chart" value="bars" checked> Pruhy · kapitoly</label><label><input type="radio" name="budget-chart" value="stacked"> Skládaný · celek</label></div></div>
+            <canvas id="barChart" height="250"></canvas><div class="chart-key" id="chartKey"></div><div class="chart-tooltip" id="chartTooltip" hidden></div>
+          </div>
+          <div class="panel trend-panel"><div class="panel-head"><div><span>VÍCELETÁ DLUHOVÁ TRAJEKTORIE</span><h2>Uzavřené roky a projekce do 2030</h2></div><span class="model-pill">MODEL</span></div><canvas id="lineChart" height="190"></canvas></div>
+        </section>
+        <aside class="detail-panel panel" id="detail"></aside>
+      </section>
+      <section class="panel history-panel" id="history"></section>
+      <footer><span>MINISTR FINANCÍ · KARIÉRA 2025–2030</span><span>Částky v mld. Kč · roky 2026–2030 jsou modelové projekce</span></footer>
+    </main>
+  </div>
+  <div class="game-modal" id="gameModal" hidden></div><div class="toast" id="toast" hidden></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

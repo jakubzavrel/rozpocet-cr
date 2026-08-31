@@ -1,0 +1,9 @@
+import { newGame } from '../engine/campaign-engine.js';
+import { budget2025 } from '../data/2025.js';
+const KEY='ministr-financi-campaign-v4';
+function migrateGame(game){if(game.schemaVersion===4&&game.campaign?.modelVersion==='2.2.0'){Object.values(game.years||{}).forEach(state=>{for(const parent of budget2025.expenses){if(!parent.children?.length)continue;const childDelta=parent.children.reduce((sum,child)=>sum+(state.amounts?.[child.id]??state.baselineAmounts?.[child.id]??child.value)-(state.baselineAmounts?.[child.id]??child.value),0);if(state.amounts)state.amounts[parent.id]=(state.amounts[parent.id]??state.baselineAmounts?.[parent.id]??parent.value)+childDelta;}});game.schemaVersion=5;game.campaign.modelVersion='2.3.0';}Object.entries(game.years||{}).forEach(([year,state])=>{if(state.closing&&!state.closing.year)state.closing.year=Number(year);});return game;}
+export function loadGame(){try{const raw=localStorage.getItem(KEY);if(!raw)return newGame();const game=migrateGame(JSON.parse(raw));if(game.schemaVersion!==5||game.campaign?.modelVersion!=='2.3.0')return newGame();return game;}catch{return newGame();}}
+export function saveGame(game){game.updatedAt=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(game));}
+export function clearGame(){localStorage.removeItem(KEY);}
+export function exportGame(game){const blob=new Blob([JSON.stringify(game,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ministr-financi-${game.currentYear}.json`;a.click();URL.revokeObjectURL(a.href);}
+export async function importGame(file){const game=migrateGame(JSON.parse(await file.text()));if(game.schemaVersion!==5||game.campaign?.modelVersion!=='2.3.0'||game.currentYear<2025||game.currentYear>2030||!game.years?.[game.currentYear])throw new Error('Soubor neobsahuje kompatibilní uloženou hru.');return game;}
